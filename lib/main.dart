@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:timer_app/base_layout.dart';
 import 'package:timer_app/pages/timer_page.dart';
 
 void main() {
@@ -6,7 +7,8 @@ void main() {
 }
 
 final theme = ThemeData(
-  colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+  primaryColor: Colors.blue,
+  brightness: Brightness.dark,
   useMaterial3: true,
 );
 
@@ -16,9 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Timer App',
       theme: theme,
-      home: const TimerPage(title: 'Flutter Demo Home Page'),
+      darkTheme: theme,
+      themeMode: ThemeMode.dark,
+      home: const BaseLayout(
+        title: 'Timer App',
+        child: TimerPage(),
+      ),
     );
   }
 }
