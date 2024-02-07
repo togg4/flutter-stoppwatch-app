@@ -8,8 +8,9 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  final stopwatch = Stopwatch();
+  var stopwatch = Stopwatch();
   String elapsed = '';
+  static const double iconSize = 35;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class _TimerPageState extends State<TimerPage> {
           Container(
             height: 300,
             width: 400,
-            color: Colors.black54,
+            color: Colors.black87,
             alignment: Alignment.center,
             child: Text(
               elapsed,
@@ -29,43 +30,74 @@ class _TimerPageState extends State<TimerPage> {
               ),
             ),
           ),
-          const SizedBox(height: 8.0),
-          if (stopwatch.isRunning)
-            ElevatedButton(
-              onPressed: () {
-                stopwatch.stop();
-                setState(() {});
-              },
-              child: const Icon(
-                Icons.pause,
-              ),
-            )
-          else
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    stopwatch.reset();
-                    setState(() {});
-                  },
-                  child: const Icon(
-                    Icons.restore,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (stopwatch.isRunning) ...[
+                SizedBox(
+                  width: 150,
+                  height: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      stopwatch.stop();
+                      setState(() {});
+                      /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
+                    },
+                    child: const Icon(
+                      Icons.pause,
+                      size: iconSize,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 8.0),
-                ElevatedButton(
-                  onPressed: () {
-                    stopwatch.start();
-                    setState(() {});
-                    /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
-                  },
-                  child: const Icon(
-                    Icons.play_arrow,
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: 150,
+                  height: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      stopwatch.reset();
+                      setState(() {});
+                    },
+                    child: const Icon(
+                      Icons.timer,
+                      size: iconSize,
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ] else ...[
+                SizedBox(
+                  width: 150,
+                  height: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      stopwatch.start();
+                      setState(() {});
+                      /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
+                    },
+                    child: const Icon(
+                      Icons.play_arrow,
+                      size: iconSize,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: 150,
+                  height: 100,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      stopwatch.reset();
+                      setState(() {});
+                    },
+                    child: const Icon(
+                      Icons.restore,
+                      size: iconSize,
+                    ),
+                  ),
+                )
+              ]
+            ],
+          ),
         ],
       ),
     );
