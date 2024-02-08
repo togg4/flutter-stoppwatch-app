@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 class TimerPage extends StatefulWidget {
@@ -8,13 +10,18 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  var stopwatch = Stopwatch();
+  var stopwatchTot = Stopwatch();
+  var stopwatchLap = Stopwatch();
   String elapsed = '';
+
+  // Button variables
   static const double iconSize = 35;
   static const double buttonHeight = 100;
   static const int buttonFlex = 10;
   static const int buttonMiddleSpaceFlex = 1;
-  static const int buttonSideSpaceFlex = 1;
+
+  // Logic variables
+  static final arrLapTime = Queue<Duration>();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,7 @@ class _TimerPageState extends State<TimerPage> {
           Container(
             height: 300,
             width: 400,
-            color: Colors.black87,
+            color: const Color.fromARGB(255, 83, 10, 10),
             alignment: Alignment.center,
             child: Text(
               elapsed,
@@ -37,26 +44,15 @@ class _TimerPageState extends State<TimerPage> {
           Expanded(
             flex: 2,
             child: Container(
-              color: Colors.amber,
+              color: Color.fromARGB(255, 34, 82, 87),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.(
-              left: 12,
-              top: 0,
-              right: 12,
-              bottom: 0,
-            ),
+            padding: const EdgeInsets.all(20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (stopwatch.isRunning) ...[
-                  const Expanded(
-                    flex: buttonSideSpaceFlex,
-                    child: SizedBox(
-                      height: 0,
-                    ),
-                  ),
+                if (stopwatchTot.isRunning) ...[
                   Expanded(
                     flex: buttonFlex,
                     child: SizedBox(
@@ -64,7 +60,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          stopwatch.stop();
+                          stopwatchTot.stop();
+                          stopwatchLap.stop();
                           setState(() {});
                           /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
                         },
@@ -88,7 +85,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          stopwatch.reset();
+                          arrLapTime.add(stopwatchLap.elapsed);
+                          stopwatchLap.reset();
                           setState(() {});
                         },
                         child: const Icon(
@@ -98,19 +96,7 @@ class _TimerPageState extends State<TimerPage> {
                       ),
                     ),
                   ),
-                  const Expanded(
-                    flex: buttonSideSpaceFlex,
-                    child: SizedBox(
-                      height: 0,
-                    ),
-                  ),
                 ] else ...[
-                  const Expanded(
-                    flex: buttonSideSpaceFlex,
-                    child: SizedBox(
-                      height: 0,
-                    ),
-                  ),
                   Expanded(
                     flex: buttonFlex,
                     child: SizedBox(
@@ -118,7 +104,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          stopwatch.start();
+                          stopwatchTot.start();
+                          stopwatchLap.start();
                           setState(() {});
                           /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
                         },
@@ -142,7 +129,9 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          stopwatch.reset();
+                          stopwatchTot.reset();
+                          stopwatchLap.reset();
+                          arrLapTime.clear;
                           setState(() {});
                         },
                         child: const Icon(
@@ -150,12 +139,6 @@ class _TimerPageState extends State<TimerPage> {
                           size: iconSize,
                         ),
                       ),
-                    ),
-                  ),
-                  const Expanded(
-                    flex: buttonSideSpaceFlex,
-                    child: SizedBox(
-                      height: 0,
                     ),
                   ),
                 ]
