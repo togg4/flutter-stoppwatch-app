@@ -3,7 +3,7 @@ import 'package:timer_app/base_layout.dart';
 import 'package:timer_app/pages/timer_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MyApp()); // Error? non-const?
 }
 
 final theme = ThemeData(
@@ -13,6 +13,7 @@ final theme = ThemeData(
 );
 
 class MyApp extends StatelessWidget {
+  // Error? statefull?
   const MyApp({super.key});
 
   @override
