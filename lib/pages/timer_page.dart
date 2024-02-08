@@ -11,6 +11,10 @@ class _TimerPageState extends State<TimerPage> {
   var stopwatch = Stopwatch();
   String elapsed = '';
   static const double iconSize = 35;
+  static const double buttonHeight = 100;
+  static const int buttonFlex = 10;
+  static const int buttonMiddleSpaceFlex = 1;
+  static const int buttonSideSpaceFlex = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -30,73 +34,133 @@ class _TimerPageState extends State<TimerPage> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (stopwatch.isRunning) ...[
-                SizedBox(
-                  width: 150,
-                  height: 100,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      stopwatch.stop();
-                      setState(() {});
-                      /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
-                    },
-                    child: const Icon(
-                      Icons.pause,
-                      size: iconSize,
+          Expanded(
+            flex: 2,
+            child: Container(
+              color: Colors.amber,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.(
+              left: 12,
+              top: 0,
+              right: 12,
+              bottom: 0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (stopwatch.isRunning) ...[
+                  const Expanded(
+                    flex: buttonSideSpaceFlex,
+                    child: SizedBox(
+                      height: 0,
                     ),
                   ),
-                ),
-                const SizedBox(width: 20),
-                SizedBox(
-                  width: 150,
-                  height: 100,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      stopwatch.reset();
-                      setState(() {});
-                    },
-                    child: const Icon(
-                      Icons.timer,
-                      size: iconSize,
+                  Expanded(
+                    flex: buttonFlex,
+                    child: SizedBox(
+                      height: buttonHeight,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          stopwatch.stop();
+                          setState(() {});
+                          /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
+                        },
+                        child: const Icon(
+                          Icons.pause,
+                          size: iconSize,
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ] else ...[
-                SizedBox(
-                  width: 150,
-                  height: 100,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      stopwatch.start();
-                      setState(() {});
-                      /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
-                    },
-                    child: const Icon(
-                      Icons.play_arrow,
-                      size: iconSize,
+                  const Expanded(
+                    flex: buttonMiddleSpaceFlex,
+                    child: SizedBox(
+                      height: 0,
                     ),
                   ),
-                ),
-                const SizedBox(width: 20),
-                SizedBox(
-                  width: 150,
-                  height: 100,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      stopwatch.reset();
-                      setState(() {});
-                    },
-                    child: const Icon(
-                      Icons.restore,
-                      size: iconSize,
+                  Expanded(
+                    flex: buttonFlex,
+                    child: SizedBox(
+                      height: buttonHeight,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          stopwatch.reset();
+                          setState(() {});
+                        },
+                        child: const Icon(
+                          Icons.timer,
+                          size: iconSize,
+                        ),
+                      ),
                     ),
                   ),
-                )
-              ]
-            ],
+                  const Expanded(
+                    flex: buttonSideSpaceFlex,
+                    child: SizedBox(
+                      height: 0,
+                    ),
+                  ),
+                ] else ...[
+                  const Expanded(
+                    flex: buttonSideSpaceFlex,
+                    child: SizedBox(
+                      height: 0,
+                    ),
+                  ),
+                  Expanded(
+                    flex: buttonFlex,
+                    child: SizedBox(
+                      height: buttonHeight,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          stopwatch.start();
+                          setState(() {});
+                          /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
+                        },
+                        child: const Icon(
+                          Icons.play_arrow,
+                          size: iconSize,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Expanded(
+                    flex: buttonMiddleSpaceFlex,
+                    child: SizedBox(
+                      height: 0,
+                    ),
+                  ),
+                  Expanded(
+                    flex: buttonFlex,
+                    child: SizedBox(
+                      height: buttonHeight,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          stopwatch.reset();
+                          setState(() {});
+                        },
+                        child: const Icon(
+                          Icons.restore,
+                          size: iconSize,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Expanded(
+                    flex: buttonSideSpaceFlex,
+                    child: SizedBox(
+                      height: 0,
+                    ),
+                  ),
+                ]
+              ],
+            ),
           ),
         ],
       ),
