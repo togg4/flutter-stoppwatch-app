@@ -10,9 +10,9 @@ class TimerPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<TimerPage> {
-  var stopwatchTot = Stopwatch();
-  var stopwatchLap = Stopwatch();
-  String elapsed = '';
+  final Stopwatch _stopwatchTot = Stopwatch();
+  final Stopwatch _stopwatchLap = Stopwatch();
+  // Duration? _elapsed;
 
   // Button variables
   static const double iconSize = 35;
@@ -22,6 +22,28 @@ class _TimerPageState extends State<TimerPage> {
 
   // Logic variables
   static final arrLapTime = Queue<Duration>();
+
+  String timeFormatingMS(Duration _elapsed) {
+    /// Formatting time according to "Hours : Minutes : Seconds"
+    /// where each time unit is given with two digits
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    if (_elapsed.inMinutes < 60) {
+      return '${twoDigits(_elapsed.inMinutes % 60)}:${twoDigits(_elapsed.inSeconds % 60)}';
+    } else {
+      return "60:59";
+    }
+  }
+
+  String timeFormatingHMS(Duration _elapsed) {
+    /// Formatting time according to "Hours : Minutes : Seconds"
+    /// where each time unit is given with two digits
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    if (_elapsed.inHours < 100) {
+      return '${twoDigits(_elapsed.inMinutes % 60)}:${twoDigits(_elapsed.inSeconds % 60)}';
+    } else {
+      return "99:59:59";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +57,9 @@ class _TimerPageState extends State<TimerPage> {
             color: const Color.fromARGB(255, 83, 10, 10),
             alignment: Alignment.center,
             child: Text(
-              elapsed,
+              timeFormatingMS(_stopwatchLap.elapsed),
               style: const TextStyle(
-                fontSize: 40,
+                fontSize: 100,
               ),
             ),
           ),
@@ -52,7 +74,7 @@ class _TimerPageState extends State<TimerPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (stopwatchTot.isRunning) ...[
+                if (_stopwatchTot.isRunning) ...[
                   Expanded(
                     flex: buttonFlex,
                     child: SizedBox(
@@ -60,8 +82,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          stopwatchTot.stop();
-                          stopwatchLap.stop();
+                          _stopwatchTot.stop();
+                          _stopwatchLap.stop();
                           setState(() {});
                           /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
                         },
@@ -85,8 +107,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          arrLapTime.add(stopwatchLap.elapsed);
-                          stopwatchLap.reset();
+                          arrLapTime.add(_stopwatchLap.elapsed);
+                          _stopwatchLap.reset();
                           setState(() {});
                         },
                         child: const Icon(
@@ -104,8 +126,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          stopwatchTot.start();
-                          stopwatchLap.start();
+                          _stopwatchTot.start();
+                          _stopwatchLap.start();
                           setState(() {});
                           /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
                         },
@@ -129,8 +151,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          stopwatchTot.reset();
-                          stopwatchLap.reset();
+                          _stopwatchTot.reset();
+                          _stopwatchLap.reset();
                           arrLapTime.clear;
                           setState(() {});
                         },
