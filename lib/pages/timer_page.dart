@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -22,6 +23,12 @@ class _TimerPageState extends State<TimerPage> {
 
   // Logic variables
   static final arrLapTime = Queue<Duration>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   String timeFormatingMS(Duration _elapsed) {
     /// Formatting time according to "Hours : Minutes : Seconds"
@@ -128,7 +135,9 @@ class _TimerPageState extends State<TimerPage> {
                         onPressed: () {
                           _stopwatchTot.start();
                           _stopwatchLap.start();
-                          setState(() {});
+                          Timer.periodic(const Duration(seconds: 1), (timer) {
+                            setState(() {});
+                          });
                           /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
                         },
                         child: const Icon(
