@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timer_app/base_layout.dart';
-import 'package:timer_app/pages/timer_page.dart';
+import 'package:timer_app/pages/stopwatch_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       home: const BaseLayout(
         title: 'Timer App',
-        child: TimerPage(),
+        child: StopWatchPage(),
       ),
     );
   }

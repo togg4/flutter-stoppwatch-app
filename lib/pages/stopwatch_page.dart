@@ -1,19 +1,22 @@
 import 'dart:async';
 import 'dart:collection';
+// import 'dart:async';
 
+// import 'package:flutter/scheduler.dart';
 import 'package:flutter/material.dart';
 
-class TimerPage extends StatefulWidget {
-  const TimerPage({super.key});
+class StopWatchPage extends StatefulWidget {
+  const StopWatchPage({super.key});
 
   @override
-  State<TimerPage> createState() => _TimerPageState();
+  State<StopWatchPage> createState() => {_StopWatchPageState()};
 }
 
-class _TimerPageState extends State<TimerPage> {
-  final Stopwatch _stopwatchTot = Stopwatch();
-  final Stopwatch _stopwatchLap = Stopwatch();
-  // Duration? _elapsed;
+class _StopWatchPageState extends State<StopWatchPage>
+    with SingleTickerProviderStateMixin {
+  final Stopwatch _stopwatch = Stopwatch();
+  // final Duration _elapsedLap = Duration.zero;
+  String lapTimeStr = "00:00";
 
   // Button variables
   static const double iconSize = 35;
@@ -23,33 +26,54 @@ class _TimerPageState extends State<TimerPage> {
 
   // Logic variables
   static final arrLapTime = Queue<Duration>();
+  // late final Ticker _ticker;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        lapTimeStr = timeFormatingMS(_stopwatch.elapsed);
+      });
+    });
   }
 
-  String timeFormatingMS(Duration _elapsed) {
+  void lapResetDispose() {
+    dispose();
+    _stopwatch.reset();
+  }
+
+  void pauseDispose() {
+    dispose();
+    _stopwatch.stop();
+  }
+
+  String timeFormatingMS(Duration elapsed) {
     /// Formatting time according to "Hours : Minutes : Seconds"
     /// where each time unit is given with two digits
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    if (_elapsed.inMinutes < 60) {
-      return '${twoDigits(_elapsed.inMinutes % 60)}:${twoDigits(_elapsed.inSeconds % 60)}';
+    if (elapsed.inMinutes < 60) {
+      return '${twoDigits(elapsed.inMinutes % 60)}:${twoDigits(elapsed.inSeconds % 60)}';
     } else {
       return "60:59";
     }
   }
 
-  String timeFormatingHMS(Duration _elapsed) {
+  String timeFormatingHMS(Duration elapsed) {
     /// Formatting time according to "Hours : Minutes : Seconds"
     /// where each time unit is given with two digits
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    if (_elapsed.inHours < 100) {
-      return '${twoDigits(_elapsed.inMinutes % 60)}:${twoDigits(_elapsed.inSeconds % 60)}';
+    if (elapsed.inHours < 100) {
+      return '${twoDigits(elapsed.inMinutes % 60)}:${twoDigits(elapsed.inSeconds % 60)}';
     } else {
       return "99:59:59";
     }
+  }
+
+  double lapTimeFontSize(double screenWidth) {
+    /// Finding the font size of the lap Time
+    /// that fills out the available space with
+    return 150 / 432 * screenWidth;
   }
 
   @override
@@ -64,9 +88,9 @@ class _TimerPageState extends State<TimerPage> {
             color: const Color.fromARGB(255, 83, 10, 10),
             alignment: Alignment.center,
             child: Text(
-              timeFormatingMS(_stopwatchLap.elapsed),
-              style: const TextStyle(
-                fontSize: 100,
+              lapTimeStr,
+              style: TextStyle(
+                fontSize: lapTimeFontSize(MediaQuery.of(context).size.width),
               ),
             ),
           ),
@@ -81,7 +105,7 @@ class _TimerPageState extends State<TimerPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_stopwatchTot.isRunning) ...[
+                if (_stopwatch.isRunning) ...[
                   Expanded(
                     flex: buttonFlex,
                     child: SizedBox(
@@ -89,8 +113,7 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          _stopwatchTot.stop();
-                          _stopwatchLap.stop();
+                          _stopwatch.stop();
                           setState(() {});
                           /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
                         },
@@ -114,8 +137,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          arrLapTime.add(_stopwatchLap.elapsed);
-                          _stopwatchLap.reset();
+                          arrLapTime.add(_stopwatch.elapsed);
+                          _stopwatch.reset();
                           setState(() {});
                         },
                         child: const Icon(
@@ -133,11 +156,8 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          _stopwatchTot.start();
-                          _stopwatchLap.start();
-                          Timer.periodic(const Duration(seconds: 1), (timer) {
-                            setState(() {});
-                          });
+                          _stopwatch.start();
+                          setState(() {});
                           /*_onTimerStarted(stopwatch.isRunning, () => setState(() {}));*/
                         },
                         child: const Icon(
@@ -160,8 +180,7 @@ class _TimerPageState extends State<TimerPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          _stopwatchTot.reset();
-                          _stopwatchLap.reset();
+                          _stopwatch.reset();
                           arrLapTime.clear;
                           setState(() {});
                         },
