@@ -1,4 +1,4 @@
-import 'dart:async';
+// import 'dart:async';
 import 'dart:collection';
 // import 'dart:async';
 
@@ -9,14 +9,14 @@ class StopWatchPage extends StatefulWidget {
   const StopWatchPage({super.key});
 
   @override
-  State<StopWatchPage> createState() => {_StopWatchPageState()};
+  State<StopWatchPage> createState() => _StopWatchPageState();
 }
 
 class _StopWatchPageState extends State<StopWatchPage>
     with SingleTickerProviderStateMixin {
   final Stopwatch _stopwatch = Stopwatch();
   // final Duration _elapsedLap = Duration.zero;
-  String lapTimeStr = "00:00";
+  String lapTimeStr = "00:00:00";
 
   // Button variables
   static const double iconSize = 35;
@@ -31,11 +31,17 @@ class _StopWatchPageState extends State<StopWatchPage>
   @override
   void initState() {
     super.initState();
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        lapTimeStr = timeFormatingMS(_stopwatch.elapsed);
-      });
-    });
+    _updateDisplay();
+  }
+
+  void _updateDisplay() {
+    setState() {
+      int hours = _stopwatch.elapsed.inHours;
+      int minutes = _stopwatch.elapsed.inMinutes;
+      int seconds = _stopwatch.elapsed.inSeconds;
+      lapTimeStr =
+          '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    }
   }
 
   void lapResetDispose() {
